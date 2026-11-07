@@ -94,7 +94,7 @@ document.querySelectorAll('.appointment-form').forEach((form) => {
     status.dataset.state = '';
     status.textContent = 'Se trimite mesajul...';
 
-    fetch(`https://formsubmit.co/ajax/${encodeURIComponent('steopoaiea@gmail.com')}`, {
+    fetch(`https://formsubmit.co/ajax/${encodeURIComponent('psiholog.carmendrobota@gmail.com')}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
