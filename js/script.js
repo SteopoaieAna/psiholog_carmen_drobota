@@ -67,7 +67,6 @@ document.querySelectorAll('.appointment-form').forEach((form) => {
   });
 
   form.addEventListener('submit', (event) => {
-    event.preventDefault();
     hasAttemptedSubmit = true;
     let firstEmptyInput;
 
@@ -79,49 +78,21 @@ document.querySelectorAll('.appointment-form').forEach((form) => {
     });
 
     if (firstEmptyInput) {
+      event.preventDefault();
       firstEmptyInput.focus();
       return;
     }
 
     if (!form.reportValidity()) {
+      event.preventDefault();
       return;
     }
 
     const submitButton = form.querySelector('.form-submit');
     const status = form.querySelector('.form-status');
-    const data = Object.fromEntries(new FormData(form).entries());
     submitButton.disabled = true;
     status.dataset.state = '';
     status.textContent = 'Se trimite mesajul...';
-
-    fetch(`https://formsubmit.co/ajax/${encodeURIComponent('psiholog.carmendrobota@gmail.com')}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(async (response) => {
-        const result = await response.json();
-        if (!response.ok || result.success === false || result.success === 'false') {
-          throw new Error(result.message || 'Mesajul nu a putut fi trimis. Încearcă din nou.');
-        }
-        status.dataset.state = 'success';
-        status.textContent = 'Mesajul a fost trimis. Îți mulțumesc!';
-        form.reset();
-        requiredFields.forEach(({ warning }) => {
-          warning.hidden = true;
-        });
-        hasAttemptedSubmit = false;
-      })
-      .catch((error) => {
-        status.dataset.state = 'error';
-        status.textContent = error.message || 'A apărut o problemă la trimiterea mesajului. Încearcă din nou.';
-      })
-      .finally(() => {
-        submitButton.disabled = false;
-      });
   });
 });
 
